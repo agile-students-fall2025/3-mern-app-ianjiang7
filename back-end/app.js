@@ -11,6 +11,7 @@ app.use(cors()) // allow cross-origin resource sharing
 // use express's builtin body-parser middleware to parse any data included in a request
 app.use(express.json()) // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming POST data
+app.use(express.static('public'));
 
 // connect to database
 mongoose
@@ -57,6 +58,26 @@ app.get('/messages/:messageId', async (req, res) => {
     })
   }
 })
+
+app.get('/aboutus', async (req, res) => {
+  try {
+    res.json({
+      bio: "Hi! My name is Ian Jiang and I'm a junior at NYU Stern studying Business, Tech, and Entrepreneurship with a double major in Computer Science \
+            I was born and raised in Brooklyn, New York and fun fact, I have a twin brother! I'm interested in studying the intersection between business and tech \
+            and I'm exploring career paths in PM, data analytics and more. \n\
+            Outside of school, I love going to the gym, playing basketball and following the NBA. I also love listening to music and trying new foods. Some of my favorites include \
+            all types of coffee, pizza, and Chinese food. and of course, my favorite game is Clash Royale", 
+      img: "/images/aboutusimg.jpeg",
+    })
+  } catch (err ){
+      console.error(err)
+      res.status(400).json({
+        error: err,
+        status: 'failed to retrieve About Me',
+      })
+  }
+})
+
 // a route to handle logging out users
 app.post('/messages/save', async (req, res) => {
   // try to save the message to the database
